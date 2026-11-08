@@ -28,9 +28,9 @@ var M=[
  {id:'hanuman',n:'Hanuman Mantra',d:'ॐ हनुमते नमः',t:'Om Hanumate Namah',mean:'Salutations to Hanuman, embodiment of strength and devotion.',use:'Courage, discipline, Tuesday and Saturday practice.',slug:'hanuman-mantra-counter'},
  {id:'gayatri',n:'Gayatri Mantra',d:'ॐ भूर्भुवः स्वः तत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि धियो यो नः प्रचोदयात्',t:'Om Bhur Bhuvah Svah Tat Savitur Varenyam Bhargo Devasya Dhimahi Dhiyo Yo Nah Prachodayat',mean:'A Rig Vedic prayer to the Sun-divinity for illumination of the intellect.',use:'Clarity, sandhya vandana at sunrise, noon and sunset.',slug:'gayatri-mantra-counter'},
  {id:'mrityunjaya',n:'Maha Mrityunjaya',d:'ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम् । उर्वारुकमिव बन्धनान् मृत्योर्मुक्षीय माऽमृतात् ॥',t:'Om Tryambakam Yajamahe Sugandhim Pushtivardhanam, Urvarukamiva Bandhanan Mrityor Mukshiya Maamritat',mean:'A prayer to the three-eyed Shiva for liberation from fear and bondage.',use:'Healing prayers, fearlessness, Shiva sadhana.',slug:'maha-mrityunjaya-mantra-counter'},
- {id:'om',n:'Om',d:'ॐ',t:'Om (Aum)',mean:'The primordial sound, the seed of all mantras.',use:'Meditation, pranayama, beginning and ending practice.'},
- {id:'mani',n:'Om Mani Padme Hum',d:'ॐ मणि पद्मे हूँ',t:'Om Mani Padme Hum',mean:'The six-syllable mantra of compassion associated with Avalokiteshvara in Tibetan Buddhism.',use:'Compassion practice, Buddhist mala and prayer-wheel traditions.'},
- {id:'wahe',n:'Waheguru',d:'वाहेगुरु',t:'Waheguru',mean:'"Wonderful Lord" – the Sikh name for the Divine used in simran.',use:'Simran, gratitude and remembrance.'},
+ {id:'om',n:'Om',d:'ॐ',t:'Om (Aum)',mean:'The primordial sound, the seed of all mantras.',use:'Meditation, pranayama, beginning and ending practice.',slug:'om-mantra-counter'},
+ {id:'mani',n:'Om Mani Padme Hum',d:'ॐ मणि पद्मे हूँ',t:'Om Mani Padme Hum',mean:'The six-syllable mantra of compassion associated with Avalokiteshvara in Tibetan Buddhism.',use:'Compassion practice, Buddhist mala and prayer-wheel traditions.',slug:'om-mani-padme-hum-counter'},
+ {id:'wahe',n:'Waheguru',d:'वाहेगुरु',t:'Waheguru',mean:'"Wonderful Lord" – the Sikh name for the Divine used in simran.',use:'Simran, gratitude and remembrance.',slug:'waheguru-simran-counter'},
  {id:'custom',n:'Custom ✎',d:'',t:'Your own name or mantra',mean:'Type any name or mantra you wish to chant.',use:'Any tradition, any name.'}
 ];
 function mById(id){for(var i=0;i<M.length;i++)if(M[i].id===id)return M[i];return M[0]}
@@ -291,33 +291,13 @@ document.addEventListener('pointerdown', function(e) {
   // Ignore clicks on buttons, inputs, links, chips, modals, controls
   if (e.target.closest('button, a, input, select, textarea, label, .chips, .menu, nav, footer, .controls, .stat')) return;
   // If in focus mode or anywhere on dial/counter background
-  if (document.body.classList.contains('focus') || e.target.closest('.dial') || e.target.closest('#counter-sec')) {
+  if (document.body.classList.contains('focus') || e.target.closest('.dial')) {
     ctx();
     tap();
   }
 });
 
-/* PWA Add to Home Screen Prompt */
-var deferredPWA = null;
-window.addEventListener('beforeinstallprompt', function(e) {
-  e.preventDefault();
-  deferredPWA = e;
-  var b = document.getElementById('pwaInstallBanner');
-  if (b) b.style.display = 'flex';
-});
-window.installPWA = function() {
-  if (deferredPWA) {
-    deferredPWA.prompt();
-    deferredPWA.userChoice.then(function(choice) {
-      if (choice.outcome === 'accepted') {
-        var b = document.getElementById('pwaInstallBanner');
-        if (b) b.style.display = 'none';
-      }
-      deferredPWA = null;
-    });
-  }
-};
-
+/* (install banner removed – see /naam-japa-counter-app/ for install steps) */
 
 /* ---------- Meditative Audio Chanting Loop (Dwell Time Hook) ---------- */
 var droneActive = false;
@@ -522,12 +502,14 @@ function updateAudioUI() {
 
 /* ---------- Multi-Language Toggle (Default: English) ---------- */
 var currentLang = 'en';
+var PAGE_HI = (document.documentElement.getAttribute('lang') === 'hi');
 try {
   var savedLang = localStorage.getItem('njs_lang');
   if (savedLang === 'hi' || savedLang === 'en') {
     currentLang = savedLang;
   }
 } catch(e) {}
+if (PAGE_HI) currentLang = 'hi';
 
 var T_DICT = {
   hi: {
@@ -596,6 +578,27 @@ var T_DICT = {
   }
 };
 
+
+var EXTRA_HI = {
+  opt: {'27':'२७ – पाव माला','54':'५४ – आधी माला','108':'१०८ – एक पूरी माला','216':'२१६ – दो माला','540':'५४० – पाँच माला','1008':'१००८ – दस माला','custom':'अपनी संख्या…'},
+  loop: {'108':'१०८ जाप (१ माला)','540':'५४० जाप (५ माला)','1008':'१००८ जाप (१० माला)','infinite':'लगातार जाप लूप'},
+  goal: 'दैनिक लक्ष्य (जाप)',
+  priv: '🔒 आपकी गिनती सिर्फ़ आपके इस डिवाइस के ब्राउज़र में सेव होती है। कोई खाता या सर्वर नहीं।',
+  audio: 'लगातार १०८ जाप का लूप और ध्यान के लिए ॐ ध्वनि। जाप के समय स्क्रीन चालू रहती है।',
+  ph: 'अपनी संख्या'
+};
+function applyExtra(lang) {
+  var hi = (lang === 'hi');
+  function sv(el, key, val) { if (!el) return; if (el.getAttribute('data-en-' + key) === null) el.setAttribute('data-en-' + key, el.textContent); el.textContent = hi ? val : el.getAttribute('data-en-' + key); }
+  $$('#target option').forEach(function(o) { var v = EXTRA_HI.opt[o.value]; if (v) sv(o, 'o', v); });
+  $$('#audioLoopMode option').forEach(function(o) { var v = EXTRA_HI.loop[o.value]; if (v) sv(o, 'o', v); });
+  $$('label.hint').forEach(function(l) { if (l.getAttribute('for') === 'goal') sv(l, 'g', EXTRA_HI.goal); });
+  $$('.hint').forEach(function(h) {
+    var t0 = h.getAttribute('data-en-h') || h.textContent;
+    if (t0.indexOf('Your counts are saved only') !== -1) sv(h, 'h', EXTRA_HI.priv);
+    else if (t0.indexOf('Continuous 108-chant loop') !== -1) sv(h, 'h', EXTRA_HI.audio);
+  });
+}
 function applyLanguage(lang) {
   currentLang = lang;
   try { localStorage.setItem('njs_lang', lang); } catch(e) {}
@@ -688,6 +691,8 @@ function applyLanguage(lang) {
     else if (txt.indexOf('Audio') !== -1 || txt.indexOf('ऑडियो') !== -1) pt.textContent = t.pAudio;
     else if (txt.indexOf('Daily goal') !== -1 || txt.indexOf('दैनिक लक्ष्य') !== -1) pt.textContent = t.pGoal;
   });
+
+  applyExtra(lang);
 
   // Tab buttons
   $$('.tab').forEach(function(tb) {
