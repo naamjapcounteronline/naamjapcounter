@@ -1,0 +1,14 @@
+NAAMJAPCOUNTER.ONLINE – DEPLOY NOTES
+1. Upload EVERYTHING in this folder to your web root (public_html / htdocs). Keep folder names as they are.
+2. Hosting: works on any static host (Hostinger, GoDaddy cPanel, Netlify, Cloudflare Pages, Vercel, GitHub Pages).
+   - Apache/cPanel: .htaccess is included (HTTPS + www redirect, caching, gzip, 404).
+   - Netlify / Cloudflare Pages: _headers is included.
+3. Enable SSL (HTTPS) – required for the offline/app features.
+4. After going live: add the site to Google Search Console and Bing Webmaster Tools and submit
+   https://naamjapcounter.online/sitemap.xml
+5. Test: https://pagespeed.web.dev and https://search.google.com/test/rich-results
+
+v6 NOTES
+- Ads (AdSense) not added yet, by design. Add after traffic starts; keep ads away from the tap button.
+- New pages: /hi/ (Hindi), /om-mantra-counter/, /om-mani-padme-hum-counter/, /waheguru-simran-counter/.
+- Re-submit sitemap.xml in Search Console after upload.
