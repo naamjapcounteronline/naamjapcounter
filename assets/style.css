@@ -424,3 +424,4 @@ body.focus .app {
 }
 
 .fig{margin:22px 0;text-align:center}.fig svg{display:block;margin:0 auto}.fig figcaption{font-size:.85rem;opacity:.7;margin-top:6px}
+@media(max-width:480px){.logo{white-space:nowrap;font-size:1.1rem;gap:8px}}

@@ -1,4 +1,4 @@
-const V='njs-v2';
+const V='njs-v3';
 const SHELL=['/','/hi/','/radha-naam-jap-counter/','/ram-naam-jap-counter/','/om-namah-shivaya-counter/','/naam-japa-counter-app/','/108-japa-counter-online/','/assets/style.css','/assets/app.js','/favicon.svg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
